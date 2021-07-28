@@ -28,21 +28,22 @@ jobs:
       #     command: npm run test:e2e
       #     start: npm run start
       #     wait-on: http://localhost:5000
-      - name: Deployment
-        if: ${{ github.event_name == 'push' }}
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "cicd-tst"
-          heroku_email: "AYAYAehehe@protonmail.com"
-          healthcheck: "https://cicd-tst.herokuapp.com/health"
-          checkstring: "ok"
-          delay: 5
-          rollbackonhealthcheckfailed: true
+      # - name: Deployment
+      #   if: ${{ github.event_name == 'push' }}
+      #   uses: akhileshns/heroku-deploy@v3.12.12
+      #   with:
+      #     heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+      #     heroku_app_name: "cicd-tst"
+      #     heroku_email: "AYAYAehehe@protonmail.com"
+      #     healthcheck: "https://cicd-tst.herokuapp.com/health"
+      #     checkstring: "ok"
+      #     delay: 5
+      #     rollbackonhealthcheckfailed: true
       - name: Bump version and push tag
         if: ${{ github.event_name == 'push' }}
         uses: anothrNick/github-tag-action@1.34.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
+          INITIAL_VERSION: 0.0.0
           DEFAULT_BUMP: patch
