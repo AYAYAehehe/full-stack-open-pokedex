@@ -18,16 +18,16 @@ jobs:
           node-version: "12.x"
       - name: npm install
         run: npm install
-      - name: lint
-        run: npm run eslint
+      # - name: lint
+      #   run: npm run eslint
       - name: build
         run: npm run build
-      - name: e2e tests
-        uses: cypress-io/github-action@v2
-        with:
-          command: npm run test:e2e
-          start: npm run start
-          wait-on: http://localhost:5000
+      # - name: e2e tests
+      #   uses: cypress-io/github-action@v2
+      #   with:
+      #     command: npm run test:e2e
+      #     start: npm run start
+      #     wait-on: http://localhost:5000
       - name: Deployment
         if: (${{ !contains(join(github.event.commits.*.message), '#SKIP') }} && ${{ github.event_name == 'push' }})
         uses: akhileshns/heroku-deploy@v3.12.12
