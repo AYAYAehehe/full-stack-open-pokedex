@@ -76,8 +76,8 @@ jobs:
           ASSEMBLED_MESSAGES: ${{ join(github.event.commits.*.message) }}
         run: echo "$ASSEMBLED MESSAGES"
       - name: Looking for '#SKIP'
-        if: ${{ contains(join(github.event.commits.*.message, '#SKIP')) }}
+        if: ${{ contains(join(github.event.commits.*.message), '#SKIP') }}
         run: echo "saw the SKIP"
       - name: negative IF
-        if: ${{ !contains(join(github.event.commits.*.message, '#SKIP')) }}
+        if: ${{ !contains(join(github.event.commits.*.message), '#SKIP') }}
         run: echo "I should not be seeing this."
