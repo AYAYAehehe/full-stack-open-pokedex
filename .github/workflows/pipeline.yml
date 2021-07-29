@@ -18,16 +18,16 @@ jobs:
           node-version: "12.x"
       - name: npm install
         run: npm install
-      # - name: lint
-      #   run: npm run eslint
+      - name: lint
+        run: npm run eslint
       - name: build
         run: npm run build
-      # - name: e2e tests
-      #   uses: cypress-io/github-action@v2
-      #   with:
-      #     command: npm run test:e2e
-      #     start: npm run start
-      #     wait-on: http://localhost:5000
+      - name: e2e tests
+        uses: cypress-io/github-action@v2
+        with:
+          command: npm run test:e2e
+          start: npm run start
+          wait-on: http://localhost:5000
       - name: Deployment
         if: (!contains(join(github.event.commits.*.message), '#SKIP') && github.event_name == 'push')
         uses: akhileshns/heroku-deploy@v3.12.12
@@ -39,7 +39,6 @@ jobs:
           checkstring: "ok"
           delay: 5
           rollbackonhealthcheckfailed: true
-        # run: echo 'Deploy'
       - uses: actions/checkout@v2
       - name: Bump version and push tag
         if: (!contains(join(github.event.commits.*.message), '#SKIP') && github.event_name == 'push')
@@ -49,12 +48,11 @@ jobs:
           WITH_V: true
           INITIAL_VERSION: 0.0.0
           DEFAULT_BUMP: patch
-        # run: echo "Bump version"
-      - name: Slack Notification
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status}}
-          fields: repo,message,commit,author,action,eventName,workflow,job,took
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        if: always()
+      # - name: Slack Notification
+      #   uses: 8398a7/action-slack@v3
+      #   with:
+      #     status: ${{ job.status}}
+      #     fields: repo,message,commit,author,action,eventName,workflow,job,took
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #   if: always()
