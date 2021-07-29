@@ -27,7 +27,7 @@ jobs:
         with:
           command: npm run test:e2e
           start: npm run start
-          wait-on: http://localhost:5000
+          wait-on: http://localhost:8080
       - name: Deployment
         if: (!contains(join(github.event.commits.*.message), '#SKIP') && github.event_name == 'push')
         uses: akhileshns/heroku-deploy@v3.12.12
