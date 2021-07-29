@@ -71,11 +71,15 @@ jobs:
         env:
           COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
         run: echo "$COMMIT_MESSAGES"
+      - name: Checking the assembled messages
+        env:
+          ASSEMBLED_MESSAGES: ${{ join(github.event.commits.*.message)}}
+          run: echo "$ASSEMBLED MESSAGES"
       - name: Looking for '#SKIP'
         env:
           ASSEMBLED_MESSAGES: ${{ join(github.event.commits.*.message)}}
           if: ${{ contains($ASSEMBLED_MESSAGES, '#SKIP')}}
-          run: echo "$ASSEMBLED_MESSAGES"
+          run: echo "saw the SKIP"
       - name: negative IF
         env:
           ASSEMBLED_MESSAGES: ${{ join(github.event.commits.*.message)}}
