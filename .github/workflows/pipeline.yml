@@ -58,19 +58,19 @@ jobs:
   a_test_job:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v2
-      - name: gihub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      - name: commits
-        env:
-          COMMITS: ${{ toJson(github.event.commits) }}
-        run: echo "$COMMITS"
-      - name: commit messages
-        env:
-          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
-        run: echo "$COMMIT_MESSAGES"
+      # - uses: actions/checkout@v2
+      # - name: gihub context
+      #   env:
+      #     GITHUB_CONTEXT: ${{ toJson(github) }}
+      #   run: echo "$GITHUB_CONTEXT"
+      # - name: commits
+      #   env:
+      #     COMMITS: ${{ toJson(github.event.commits) }}
+      #   run: echo "$COMMITS"
+      # - name: commit messages
+      #   env:
+      #     COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+      #   run: echo "$COMMIT_MESSAGES"
       - name: Checking the assembled messages
         env:
           ASSEMBLED_MESSAGES: ${{ join(github.event.commits.*.message)}}
@@ -78,10 +78,10 @@ jobs:
       - name: Looking for '#SKIP'
         env:
           ASSEMBLED_MESSAGES: ${{ join(github.event.commits.*.message)}}
-        if: ${{ contains($ASSEMBLED_MESSAGES, '#SKIP')}}
+        if: ${{ contains("$ASSEMBLED_MESSAGES", '#SKIP')}}
         run: echo "saw the SKIP"
       - name: negative IF
         env:
           ASSEMBLED_MESSAGES: ${{ join(github.event.commits.*.message)}}
-        if: ${{ !contains(ASSEMBLED_MESSAGES, '#SKIP') }}
+        if: ${{ !contains("$ASSEMBLED_MESSAGES", '#SKIP') }}
         run: echo "I should not be seeing this."
