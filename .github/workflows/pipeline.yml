@@ -47,7 +47,6 @@
 #           WITH_V: true
 #           INITIAL_VERSION: 0.0.0
 #           DEFAULT_BUMP: patch
-
 name: Testing stuff
 
 on:
@@ -72,3 +71,13 @@ jobs:
         env:
           COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
         run: echo "$COMMIT_MESSAGES"
+      - name: Looking for '#SKIP'
+        env:
+          ASSEMBLED_MESSAGES: ${{ join(github.event.commits.*.message)}}
+          if: ${{ contains($ASSEMBLED_MESSAGES, '#SKIP')}}
+          run: echo "$ASSEMBLED_MESSAGES"
+      - name: attempting to use the last variable
+          run: echo "$ASSEMBLED_MESSAGES"
+      - name: negative IF
+          if: ${{ !contains(ASSEMBLED_MESSAGES, '#SKIP') }}
+          run: echo "I should not be seeing this."
