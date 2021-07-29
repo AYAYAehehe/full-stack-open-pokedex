@@ -30,57 +30,31 @@ jobs:
       #     wait-on: http://localhost:5000
       - name: Deployment
         if: (!contains(join(github.event.commits.*.message), '#SKIP') && github.event_name == 'push')
-        # uses: akhileshns/heroku-deploy@v3.12.12
-        # with:
-        #   heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-        #   heroku_app_name: "cicd-tst"
-        #   heroku_email: "AYAYAehehe@protonmail.com"
-        #   healthcheck: "https://cicd-tst.herokuapp.com/health"
-        #   checkstring: "ok"
-        #   delay: 5
-        #   rollbackonhealthcheckfailed: true
-        run: echo 'Deploy'
-      # - uses: actions/checkout@v2
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "cicd-tst"
+          heroku_email: "AYAYAehehe@protonmail.com"
+          healthcheck: "https://cicd-tst.herokuapp.com/health"
+          checkstring: "ok"
+          delay: 5
+          rollbackonhealthcheckfailed: true
+        # run: echo 'Deploy'
+      - uses: actions/checkout@v2
       - name: Bump version and push tag
         if: (!contains(join(github.event.commits.*.message), '#SKIP') && github.event_name == 'push')
-        # uses: anothrNick/github-tag-action@1.34.0
-        # env:
-        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        #   WITH_V: true
-        #   INITIAL_VERSION: 0.0.0
-        #   DEFAULT_BUMP: patch
-        run: echo "Bump version"
-# name: Testing stuff
-
-# on:
-#   push:
-#     branches:
-#       - master
-
-# jobs:
-#   a_test_job:
-#     runs-on: ubuntu-18.04
-#     steps:
-# - uses: actions/checkout@v2
-# - name: gihub context
-#   env:
-#     GITHUB_CONTEXT: ${{ toJson(github) }}
-#   run: echo "$GITHUB_CONTEXT"
-# - name: commits
-#   env:
-#     COMMITS: ${{ toJson(github.event.commits) }}
-#   run: echo "$COMMITS"
-# - name: commit messages
-#   env:
-#     COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
-#   run: echo "$COMMIT_MESSAGES"
-# - name: Checking the assembled messages
-#   env:
-#     ASSEMBLED_MESSAGES: ${{ join(github.event.commits.*.message) }}
-#   run: echo "$ASSEMBLED MESSAGES"
-# - name: Looking for '#SKIP'
-#   if: ${{ contains(join(github.event.commits.*.message), '#SKIP') }}
-#   run: echo "saw the SKIP"
-# - name: negative IF
-#   if: ${{ !contains(join(github.event.commits.*.message), '#SKIP') }}
-#   run: echo "I should not be seeing this."
+        uses: anothrNick/github-tag-action@1.34.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          INITIAL_VERSION: 0.0.0
+          DEFAULT_BUMP: patch
+        # run: echo "Bump version"
+      - name: Slack Notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status}}
+          fields: repo,message,commit,author,action,eventName,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
