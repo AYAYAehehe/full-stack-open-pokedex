@@ -76,8 +76,8 @@ jobs:
           ASSEMBLED_MESSAGES: ${{ join(github.event.commits.*.message)}}
           if: ${{ contains($ASSEMBLED_MESSAGES, '#SKIP')}}
           run: echo "$ASSEMBLED_MESSAGES"
-      - name: attempting to use the last variable
-          run: echo "$ASSEMBLED_MESSAGES"
       - name: negative IF
+        env:
+          ASSEMBLED_MESSAGES: ${{ join(github.event.commits.*.message)}}
           if: ${{ !contains(ASSEMBLED_MESSAGES, '#SKIP') }}
           run: echo "I should not be seeing this."
